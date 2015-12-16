@@ -1,0 +1,2 @@
+# oestatdump
+OpenEdge DB statistics
