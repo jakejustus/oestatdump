@@ -320,6 +320,8 @@ PROCEDURE DumpDbStatInflux:
   FOR EACH ttDbStatDump NO-LOCK:
       PUT STREAM Influx UNFORMATTED SUBSTITUTE("dbstat,hostname=&2,dbname=&3 ", "", ttDbStatDump.DbHost, ttDbStatDump.DbNam).
       PUT STREAM Influx UNFORMATTED "b2lru=" + (if ttDbStatDump.B2LRUEnbld then '1' else '0').
+      PUT STREAM Influx UNFORMATTED "i,tblrngovfw=" + (if ttDbStatDump.HighestTableId > ttDbStatDump.TableStatBase + ttDbStatDump.TableRangeSize then '1' else '0').
+      PUT STREAM Influx UNFORMATTED "i,idxrngovfw=" + (if ttDbStatDump.HighestIndexId > ttDbStatDump.IndexStatBase + ttDbStatDump.IndexRangeSize then '1' else '0').
       PUT STREAM Influx UNFORMATTED "i,recreads=" + STRING(ttDbStatDump.RecRead).
       PUT STREAM Influx UNFORMATTED "i,recupdates=" + STRING(ttDbStatDump.RecUpdate).
       PUT STREAM Influx UNFORMATTED "i,recdeletes=" + STRING(ttDbStatDump.RecDelete).
