@@ -304,7 +304,7 @@ PROCEDURE DumpDbStatInflux:
 
   OUTPUT STREAM Influx TO VALUE(vLastSnapshotDir + '/ResrcStats.influx.txt') BINARY.
   FOR EACH ttResrcStatDump WHERE ttResrcStatDump.ResrcLock GT 0 OR ttResrcStatDump.ResrcWait GT 0 NO-LOCK:
-      PUT STREAM Influx UNFORMATTED SUBSTITUTE("resrcstat,hostname=&2,dbname=&3,resource=~"&4~" locks=&5i,waits=&6i &9000000000", "", ttResrcStatDump.DbHost, ttResrcStatDump.DbNam, replace(trim(ttResrcStatDump.resrcType + '.' + ttResrcStatDump.resrcName), ' ', '_'), ttResrcStatDump.ResrcLock, ttResrcStatDump.ResrcWait, "", "", secTS).
+      PUT STREAM Influx UNFORMATTED SUBSTITUTE("resrcstat,hostname=&2,dbname=&3,type=~"&4~",resource=~"&5~" locks=&6i,waits=&7i &9000000000", "", ttResrcStatDump.DbHost, ttResrcStatDump.DbNam, trim(ttResrcStatDump.resrcType), replace(trim(ttResrcStatDump.resrcName), ' ', '_'), ttResrcStatDump.ResrcLock, ttResrcStatDump.ResrcWait, "", secTS).
       PUT STREAM Influx UNFORMATTED CHR(10).
   END.
   OUTPUT STREAM Influx CLOSE.
